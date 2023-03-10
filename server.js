@@ -6,14 +6,13 @@ const exphbs  = require('express-handlebars');
 
 
 
-// Configure PostgreSQL connection
 const pool = new pg.Pool({
-    user: 'krhypwqm',
-    host: 'suleiman.db.elephantsql.com',
-    database: 'krhypwqm',
-    password: '0s9wUh-JU1SkxoXswFTv_zGYlicaX2Pp',
-    port: 5432
-});
+    user: "spzacewd",
+    host: "hansken.db.elephantsql.com",
+    database: "spzacewd",
+    password: "WVPpfL1Ev3PkDzLGBpGIB3j7DyfvZIFL",
+    port: 5432,
+  });
 
 // Prepare the database
 pool.query(
@@ -65,41 +64,35 @@ app.get('/update-user', (req, res) => {
 
 // Update user data in database
 app.post('/update-user', (req, res) => {
-    const id = req.body.id;
-    const name = req.body.name;
-    const email = req.body.email;
+  const { id, name, email } = req.query;
+  const query = {
+    text: 'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+    values: [name, email, id],
+  };
+  try {
+    const result = await pool.query(query);
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error updating data into PostgreSQL' });
+  }
+});
   
-    // Update user data in database
-    const result = pool.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-    [name, email,id],
-
-    (error) => {
-        if (error) {
-            console.log(error); res.status(500).json({ message: 'Error Updating data into PostgreSQL' });
-        } else {
-            res.redirect("/");
-        }
-    });
-
-  });
 
 // Delete user data in database
 app.get('/delete-user', (req, res) => {
+    
     const id = req.query.id;
-    // Delete user data from database
-    const result = pool.query(
-    'DELETE FROM users WHERE id = $1',
-    [id],
-    (error) => {
-        if (error) {
-            console.log(error); res.status(500).json({ message: 'Error Delete data from PostgreSQL' });
-        } else {
-            res.redirect("/");
-        }
-    });
+   const query = {
+    text: 'DELETE FROM users WHERE id = $1',
+    values: [id], };
+    try { const result = await pool.query(query);
+    res.redirect('/'); }
+    catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error deleting data from PostgreSQL' }); } });
 
-  });
+  
 
 // Handle form submission
 app.post('/insert-user', (req, res) => {

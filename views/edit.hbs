@@ -10,25 +10,31 @@
     <center>
         <h1>User List</h1>
     </center>
-    <form method="post" action="/update-user">
     <table>
-        <tr>
-            <td><label for="id">ID:</label></td>
-            <td><input type="number" id="id" readonly="true" name="id" value="{{users.id}}"></td>
-        </tr>
-        <tr>
-            <td><label for="name">Name:</label></td>
-            <td><input type="text" id="name" name="name" value="{{users.name}}"></td>
-        </tr>
-        <tr>
-            <td><label for="email">Email:</label></td>
-            <td><input type="email" id="email" name="email" value="{{users.email}}"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><a href="/">back</a> | <input type="submit" value="Update"></td>
-        </tr>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <form method="post" action="/update-user">
+                    <td>+</td>
+                    <td><input type="text" name="name" placeholder="Name"></td>
+                    <td><input type="email" name="email" placeholder="Email"></td>
+                    <td><button type="submit">Updatew</button></td>
+                </form>
+            </tr> {{#each users}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{formatDate this.created_at}}</td>
+            </tr> {{/each}}
+        </tbody>
     </table>
-    </form>
 </body>
 
-</html>
